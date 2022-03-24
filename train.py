@@ -11,6 +11,7 @@ from torch.utils.data import DataLoader, random_split
 from tqdm import tqdm
 
 from utils.data import BasicDataset
+from evaluate import evaluate, loss_fn
 from model.siamso import SiamSO
 
 dir_template = Path('./dataset/data/template/')
@@ -19,22 +20,6 @@ dir_loc_csv = Path('./dataset/data_pair.csv')
 dir_checkpoint = Path('./checkpoints/')
 
 
-
-def loss_fn(batch, pred):
-    loss = torch.tensor(0).to(device=pred.device, dtype=torch.float32)
-    # print(pred.shape)
-    for loc, response_map in zip(batch['loc'], pred):
-
-        loc = loc.cpu().numpy()
-        sz = response_map.shape[0]
-        response_map = torch.sigmoid(response_map)
-        pred_area = response_map[int(sz * loc[0]) : int(sz * loc[2]), int(sz * loc[1]) : int(sz * loc[3])]
-
-        alpha = pred_area.shape[0] ** 2 / sz ** 2
-        
-        loss += -(1 - alpha) * pred_area.sum() + alpha * (response_map.sum() - pred_area.sum())
-
-    return loss
 
 
 
@@ -104,13 +89,15 @@ def train_net(net,
 
                 pbar.set_postfix(**{'loss (batch)': loss.item()})
 
+
+
                 # Evaluation round
                 division_step = (n_train // (10 * batch_size))
                 if division_step > 0:
                     if global_step % division_step == 0:
-                        histograms = {}
-                        for tag, value in net.named_parameters():
-                            tag = tag.replace('/', '.')
+                        val_score = evaluate(net, val_loader, device)
+
+                        logging.info('Validation Dice score: {}'.format(val_score))
 
 
         if save_checkpoint:
