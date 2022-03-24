@@ -6,7 +6,7 @@ from tqdm import tqdm
 def loss_fn(batch, pred):
     loss = torch.tensor(0).to(device=pred.device, dtype=torch.float32)
     # print(pred.shape)
-    for loc, response_map in zip(batch['loc'], pred):
+    for loc, response_map in zip(batch['loc'], pred[0]):
 
         loc = loc.cpu().numpy()
         sz = response_map.shape[0]
