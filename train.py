@@ -97,7 +97,7 @@ def train_net(net,
                     if global_step % division_step == 0:
                         val_score = evaluate(net, val_loader, device)
 
-                        logging.info('Validation Dice score: {}'.format(val_score))
+                        logging.info('loss: {}'.format(val_score))
 
 
         if save_checkpoint:
