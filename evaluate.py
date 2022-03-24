@@ -14,9 +14,9 @@ def loss_fn(batch, pred):
         response_map = torch.sigmoid(response_map)
         pred_area = response_map[int(sz * loc[0]) : int(sz * loc[2]), int(sz * loc[1]) : int(sz * loc[3])]
 
-        alpha = pred_area.shape[0] ** 2 / sz ** 2
+        alpha = (pred_area.shape[0] ** 2) / (sz ** 2)
         
-        loss += -(1 - alpha) * pred_area.sum() + alpha * (response_map.sum() - pred_area.sum())
+        loss -= (1 - alpha) * pred_area.sum() + alpha * (response_map.sum() - pred_area.sum())
 
     return loss / pred.shape[1]
 
