@@ -89,7 +89,7 @@ def train_net(net,
 
                 pbar.set_postfix(**{'loss (batch)': loss.item()})
 
-
+                pbar.update(batch['template'].shape[0])
 
                 # Evaluation round
                 division_step = (n_train // (10 * batch_size))
