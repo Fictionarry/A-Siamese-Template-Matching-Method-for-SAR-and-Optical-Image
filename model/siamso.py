@@ -17,7 +17,7 @@ class SiamSO(nn.Module):
         batch_size = batch['template'].shape[0]
         # print(batch_size)
         template_feature = self.unet(batch['template'])
-        search_feature = self.unet(batch['search']).squeeze(1).unsqueeze(0)
+        search_feature = self.unet(batch['search'])
         # print(template_feature.shape)
         # print(search_feature.shape)
         out_channels = F.conv2d(search_feature.view(1, -1, search_feature.shape[-2], search_feature.shape[-1]).contiguous(),
