@@ -6,9 +6,10 @@ from tqdm import tqdm
 def loss_fn(batch, pred):
     loss = torch.tensor(0).to(device=pred.device, dtype=torch.float32)
     # print(pred.shape)
-    for loc, response_map in zip(batch['loc'], pred[0]):
+    for loc, response_map in zip(batch['loc'], pred):
 
         loc = loc.cpu().numpy()
+        response_map = response_map[0]
         sz = response_map.shape[0]
         # print(sz)
         response_map = torch.sigmoid(response_map)

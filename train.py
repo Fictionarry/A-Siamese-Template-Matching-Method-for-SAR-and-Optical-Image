@@ -132,7 +132,7 @@ if __name__ == '__main__':
     # Change here to adapt to your data
     # n_channels=3 for RGB images
     # n_classes is the number of probabilities you want to get per pixel
-    net = SiamSO(n_channels=3, bilinear=args.bilinear, device = device)
+    net = SiamSO(n_channels=3, classes=3, bilinear=args.bilinear, device = device)
 
     logging.info(f'Network:\n'
                  f'\t{"Bilinear" if net.bilinear else "Transposed conv"} upscaling')
