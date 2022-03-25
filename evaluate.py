@@ -19,7 +19,7 @@ def loss_fn(batch, pred):
         
         loss += -(1 - alpha) * pred_area.sum() + alpha * (response_map.sum() - pred_area.sum())
 
-    return loss / pred.shape[1]
+    return loss / pred.shape[0]
 
 
 
