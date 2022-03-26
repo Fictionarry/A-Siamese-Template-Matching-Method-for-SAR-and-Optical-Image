@@ -76,10 +76,12 @@ classes = 4
 outConv = nn.Conv2d(classes, 1, kernel_size = 1)
 batch_size = 2
 
-out_channels = F.conv2d(search_feature.view(1, -1, search_feature.shape[-2], search_feature.shape[-1]).contiguous(),
-                         weight = template_feature.view(-1, 1, template_feature.shape[-2], template_feature.shape[-1]).contiguous(),
+out_channels = F.conv2d(search_feature.view(1, -1, search_feature.shape[-2], search_feature.shape[-1]),
+                         weight = template_feature.view(-1, 1, template_feature.shape[-2], template_feature.shape[-1]),
                          stride = 1, padding = 0, groups = batch_size * classes)
 print(out_channels)
-print(out_channels.view(batch_size, -1, out_channels.shape[-2], out_channels.shape[-1]))
-out = outConv(out_channels.view(batch_size, -1, out_channels.shape[-2], out_channels.shape[-1]))
+
+out_channels_reshape = out_channels.view(batch_size, -1, out_channels.shape[-2], out_channels.shape[-1])
+out = outConv(out_channels_reshape)
 print(out)
+print(outConv.weight)

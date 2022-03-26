@@ -20,8 +20,8 @@ class SiamSO(nn.Module):
         search_feature = self.unet(batch['search'])
         # print(template_feature.shape)
         # print(search_feature.shape)
-        out_channels = F.conv2d(search_feature.view(1, -1, search_feature.shape[-2], search_feature.shape[-1]).contiguous(),
-                         weight = template_feature.view(-1, 1, template_feature.shape[-2], template_feature.shape[-1]).contiguous(),
+        out_channels = F.conv2d(search_feature.view(1, -1, search_feature.shape[-2], search_feature.shape[-1]),
+                         weight = template_feature.view(-1, 1, template_feature.shape[-2], template_feature.shape[-1]),
                          stride = 1, padding = 0, groups = batch_size * self.classes)
         # print(out.shape)
         out = self.outConv(out_channels.view(batch_size, -1, out_channels.shape[-2], out_channels.shape[-1]))
