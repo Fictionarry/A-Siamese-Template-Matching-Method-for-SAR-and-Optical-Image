@@ -15,7 +15,7 @@ def loss_fn(batch, pred):
         response_map = torch.sigmoid(response_map)
         template_scale_x = loc[2] - loc[0]
         template_scale_y = loc[3] - loc[1]
-        pred_area = response_map[int(sz / (1 - template_scale_x) * loc[1]) : int(sz / (1 - template_scale_x) * loc[3]),
+        pred_area = response_map[int(sz / (1 - template_scale_y) * loc[1]) : int(sz / (1 - template_scale_y) * loc[3]),
                                     int(sz / (1 - template_scale_x) * loc[0]) : int(sz / (1 - template_scale_x) * loc[2])]
 
         alpha = (pred_area.shape[0] ** 2) / (sz ** 2)

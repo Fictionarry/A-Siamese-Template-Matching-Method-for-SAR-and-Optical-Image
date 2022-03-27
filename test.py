@@ -4,7 +4,7 @@ import torch.nn.functional as F
 
 
 
-
+'''
 a = torch.FloatTensor([
                     [
                     [[1,1,1],
@@ -85,3 +85,16 @@ out_channels_reshape = out_channels.view(batch_size, -1, out_channels.shape[-2],
 out = outConv(out_channels_reshape)
 print(out)
 print(outConv.weight)
+'''
+
+
+
+import PIL.Image as Image
+import numpy as np
+
+img = Image.open('C:\\Users\\57168\\Desktop\\Swiss Industrial Area Attisholz\\Attisholz/Attisholz_Flight_01_00003.jpg')
+print(img.size)
+img_nparray = np.asarray(img)
+print(img_nparray.shape)
+img_tensor = torch.as_tensor(img_nparray)
+print(img_tensor.shape)
