@@ -22,7 +22,7 @@ def loss_fn(batch, pred):
         loc_x = int(sz_x * (loc[0] + loc[2] - template_scale_x) / 2)
         pred_area = response_map[max(0, loc_y - pred_radius) : min(sz_y, loc_y + pred_radius),  max(0, loc_x - pred_radius) : min(sz_x, loc_x + pred_radius)]
         alpha = (pred_area.shape[0] * pred_area.shape[1]) / (sz_x * sz_y)
-        print(pred_area.shape)
+        # print(pred_area.shape)
         loss += -(1 - alpha) * pred_area.sum() + alpha * (response_map.sum() - pred_area.sum())
 
     return loss / pred.shape[0]
