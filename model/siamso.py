@@ -25,6 +25,5 @@ class SiamSO(nn.Module):
                          stride = 1, padding = 0, groups = batch_size * self.classes)
         # print(out.shape)
         out = self.outConv(out_channels.view(batch_size, -1, out_channels.shape[-2], out_channels.shape[-1]))
-        ZeroPad = nn.ZeroPad2d(padding=(template_feature.shape[-2] // 2, template_feature.shape[-2] // 2, template_feature.shape[-1] // 2, template_feature.shape[-1] // 2))
 
-        return ZeroPad(out)
+        return out
