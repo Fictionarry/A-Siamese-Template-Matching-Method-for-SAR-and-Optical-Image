@@ -3,7 +3,7 @@ import torch.nn.functional as F
 from tqdm import tqdm
 
 
-def loss_fn(batch, pred):
+def loss_fn(batch, pred, pred_radius):
     loss = torch.tensor(0).to(device=pred.device, dtype=torch.float32)
     # print(pred.shape)
     for loc, response_map in zip(batch['loc'], pred):
@@ -14,7 +14,6 @@ def loss_fn(batch, pred):
         sz_y = response_map.shape[1]
         # print(sz)
 
-        pred_radius = 10
         response_map = torch.sigmoid(response_map)
         template_scale_x = loc[2] - loc[0]
         template_scale_y = loc[3] - loc[1]
@@ -29,7 +28,7 @@ def loss_fn(batch, pred):
 
 
 
-def evaluate(net, dataloader, device):
+def evaluate(net, dataloader, device, pred_radius):
     net.eval()
     num_val_batches = len(dataloader)
     loss = 0
@@ -43,7 +42,7 @@ def evaluate(net, dataloader, device):
 
         with torch.no_grad():
             pred = net(batch)
-            loss += loss_fn(batch, pred)
+            loss += loss_fn(batch, pred, pred_radius)
            
 
     net.train()

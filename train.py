@@ -32,7 +32,8 @@ def train_net(net,
               val_percent: float = 0.2,
               save_checkpoint: bool = True,
               img_scale: float = 0.5,
-              amp: bool = False):
+              amp: bool = False,
+              pred_radius: int = 20):
     # 1. Create dataset
     dataset = BasicDataset(dir_template, dir_search, dir_loc_csv, img_scale)
 
@@ -77,7 +78,7 @@ def train_net(net,
 
                 with torch.cuda.amp.autocast(enabled=amp):
                     pred = net(batch)
-                    loss = loss_fn(batch, pred)
+                    loss = loss_fn(batch, pred, pred_radius)
 
                 optimizer.zero_grad(set_to_none=True)
                 grad_scaler.scale(loss).backward()
@@ -95,7 +96,7 @@ def train_net(net,
                 division_step = (n_train // (10 * batch_size))
                 if division_step > 0:
                     if global_step % division_step == 0:
-                        val_score = evaluate(net, val_loader, device)
+                        val_score = evaluate(net, val_loader, device, pred_radius)
 
                         logging.info('loss: {}'.format(val_score))
 
@@ -118,6 +119,8 @@ def get_args():
                         help='Percent of the data that is used as validation (0-100)')
     parser.add_argument('--amp', action='store_true', default=False, help='Use mixed precision')
     parser.add_argument('--bilinear', action='store_true', default=False, help='Use bilinear upsampling')
+    parser.add_argument('--pred_radius', action='store_true', default=20)
+
 
     return parser.parse_args()
 
@@ -150,7 +153,8 @@ if __name__ == '__main__':
                   device=device,
                   img_scale=args.scale,
                   val_percent=args.val / 100,
-                  amp=args.amp)
+                  amp=args.amp, 
+                  pred_radius=args.pred_radius)
     except KeyboardInterrupt:
         torch.save(net.state_dict(), 'INTERRUPTED.pth')
         logging.info('Saved interrupt')
